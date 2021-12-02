@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 public class CatalogTest {
@@ -16,7 +17,8 @@ public class CatalogTest {
 	public void getAllBooks_ReturnsEmptyBookList_IfNoBooksAreInTheCatalogue(){
 		//Arrange
 		IReadItemCommand mockRIC = Mockito.mock(IReadItemCommand.class);
-		Catalog cat = new Catalog(mockRIC);
+		IWriteItemCommand mockWrite = Mockito.mock(IWriteItemCommand.class);
+		Catalog cat = new Catalog(mockRIC, mockWrite);
 		//Act
 		List<Book> bookList = cat.getAllBooks();
 		int zero = 0;
@@ -28,7 +30,8 @@ public class CatalogTest {
 	public void getAllBooks_CallsReadAllMethodOfReadItemCommand_WhenCalled(){
 		//Arrange
 		IReadItemCommand mockRIC = Mockito.mock(IReadItemCommand.class);
-		Catalog cat = new Catalog(mockRIC);
+		IWriteItemCommand mockWrite = Mockito.mock(IWriteItemCommand.class);
+		Catalog cat = new Catalog(mockRIC, mockWrite);
 		//Act
 		cat.getAllBooks();
 		//Assert
@@ -40,7 +43,8 @@ public class CatalogTest {
 	public void getAllBooks_ReturnsListOfBooksItReceivesFromReadAllMethodOfReadItemCommand_WhenCalled(){
 		//Arrange
 		IReadItemCommand mockRIC = Mockito.mock(IReadItemCommand.class);
-		Catalog cat = new Catalog(mockRIC);
+		IWriteItemCommand mockWrite = Mockito.mock(IWriteItemCommand.class);
+		Catalog cat = new Catalog(mockRIC, mockWrite);
 		
 		Book mockBook1 = Mockito.mock(Book.class);
 		Book mockBook2 = Mockito.mock(Book.class);
@@ -53,19 +57,31 @@ public class CatalogTest {
 		mockList.add(mockBook3);
 		
 		Mockito.when(mockRIC.readAll()).thenReturn(mockList); //thenReturn sepcifies what to return when mocking
-		//"Call this method then return this list"
+		//" When you call this method, then return this list"
 				
 		List<Book> returnedBookList = cat.getAllBooks();
 		
 		assertEquals(mockList, returnedBookList);
-		
-		
-		
-		
-		
-		
+			
 	}
 
+	//The addBook method of Catalogue 
+	//should pass the book it is given to 
+	//the insertItem method of WriteItemCommand.
+	
+	@Test
+	public void test_addBookMethodOfCatalogPassesBookToInsertItemMethodOfWriteItemCommand() {
+		//Arrange
+		IReadItemCommand mockRIC = Mockito.mock(IReadItemCommand.class);
+		IWriteItemCommand mockWrite = Mockito.mock(IWriteItemCommand.class);
+		Catalog cat = new Catalog(mockRIC, mockWrite);
+		Book mockBook = Mockito.mock(Book.class);
+		//Act 
+		cat.addBook(mockBook);
+
+		Mockito.verify(mockWrite, Mockito.times(1)).insertItem(mockBook);
+		
+	}
 
 
 }

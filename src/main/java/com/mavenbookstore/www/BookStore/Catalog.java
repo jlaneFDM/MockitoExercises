@@ -4,32 +4,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Catalog {
-	
+
 	private List<Book> bookList;
 	IReadItemCommand ric;
-	
-	public Catalog(IReadItemCommand mockRIC) {
-		bookList = new ArrayList<Book>();;
+	IWriteItemCommand wic;
+
+	public Catalog(IReadItemCommand mockRIC, IWriteItemCommand mockWrite) {
+		bookList = new ArrayList<Book>();
 		this.ric = mockRIC;
-		
+		this.wic = mockWrite;
+
 	}
 
-
-
-	public List<Book> getAllBooks(){
-		
-		bookList = ric.readAll();
-				
-		return bookList;
-	}
-
+	// getter
 	public List<Book> getBookList() {
 		return bookList;
 	}
 
+	// setter
 	public void setBookList(List<Book> bookList) {
 		this.bookList = bookList;
 	}
-	
-	
+
+	// methods
+	public List<Book> getAllBooks() {
+
+		bookList = ric.readAll();
+
+		return bookList;
+	}
+
+	public void addBook(Book book) {
+		wic.insertItem(book);
+
+	}
+
 }
