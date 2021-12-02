@@ -39,4 +39,19 @@ public class Catalog {
 
 	}
 
+	public void addBooks(List<Book> books) {
+		for (Book book : books) {
+			wic.insertItem(book);
+		}
+		
+		
+	}
+
+	public void getBook(String isbn) {
+		
+		ric.getItem(isbn);
+		
+		
+	}
+
 }

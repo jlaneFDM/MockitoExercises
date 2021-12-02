@@ -1,14 +1,11 @@
 package com.mavenbookstore.www.BookStore;
 
-
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 public class CatalogTest {
@@ -64,10 +61,6 @@ public class CatalogTest {
 		assertEquals(mockList, returnedBookList);
 			
 	}
-
-	//The addBook method of Catalogue 
-	//should pass the book it is given to 
-	//the insertItem method of WriteItemCommand.
 	
 	@Test
 	public void test_addBookMethodOfCatalogPassesBookToInsertItemMethodOfWriteItemCommand() {
@@ -78,10 +71,41 @@ public class CatalogTest {
 		Book mockBook = Mockito.mock(Book.class);
 		//Act 
 		cat.addBook(mockBook);
-
+		//Verify
 		Mockito.verify(mockWrite, Mockito.times(1)).insertItem(mockBook);
-		
 	}
-
-
+	
+	@Test
+	public void test_insertItemOfWriteItemCommandCalledNTimesWhereNIsNumberOfBooks() {
+		//Arrange
+		IReadItemCommand mockRIC = Mockito.mock(IReadItemCommand.class);
+		IWriteItemCommand mockWrite = Mockito.mock(IWriteItemCommand.class);
+		Book b1 = Mockito.mock(Book.class);
+		Book b2 = Mockito.mock(Book.class);
+		Book b3 = Mockito.mock(Book.class);
+		//Act
+		List<Book> books = new ArrayList<Book>();
+		books.add(b1);
+		books.add(b2);
+		books.add(b3);
+		Catalog cat = new Catalog( mockRIC,mockWrite);
+		cat.addBooks(books);
+		//verify
+		Mockito.verify(mockWrite, Mockito.times(1)).insertItem(b1);
+		Mockito.verify(mockWrite, Mockito.times(1)).insertItem(b2);
+		Mockito.verify(mockWrite, Mockito.times(1)).insertItem(b3);
+	
+	}
+	
+	
+   @Test
+   public void test_getBookReturnsValueFromReadItemCommandGetItemMethod() {
+	   //Arrage
+	  
+	   
+	   
+	   
+	   
+	   
+   }
 }
